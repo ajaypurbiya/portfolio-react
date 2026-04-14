@@ -1,0 +1,22 @@
+{
+  "name": "mern-portfolio",
+  "version": "1.0.0",
+  "description": "Full-stack MERN Portfolio by Ajay Purbiya",
+  "author": "Ajay Purbiya",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "frontend:dev": "cd frontend && npm start",
+    "backend:dev": "cd backend && npm run dev",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ajaypurbiya/portfolio.git"
+  },
+  "keywords": ["mern", "portfolio", "react", "nodejs", "mongodb"],
+  "license": "MIT"
+}
