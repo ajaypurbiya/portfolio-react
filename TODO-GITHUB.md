@@ -2,13 +2,13 @@
 
 ## Steps:
 - [x] Install GitHub CLI (winget/scoop)
-- [ ] gh auth login
-- [ ] git init
+- [x] gh auth login
+- [x] git init
 - [x] Create .gitignore, README.md, package.json
-- [ ] git add . && git commit -m \"Initial MERN portfolio commit\"
-- [ ] gh repo create portfolio --public --remote=origin --source=. --push --public -y
+- [x] git add . && git commit -m \"Initial MERN portfolio commit\"
+- [x] gh repo create portfolio --public --remote=origin --source=. --push --public -y
 - [ ] Verify push: git remote -v, repo URL
 - [ ] Deploy instructions (Vercel frontend, Render backend)
 - [ ] Mark complete
 
-Current status: GitHub CLI installed. Next: gh auth login (interactive browser login)
+Current status: Code pushed to GitHub. Next: Verify push and Deploy instructions
