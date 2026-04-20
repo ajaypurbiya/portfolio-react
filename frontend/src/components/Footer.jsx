@@ -2,41 +2,42 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white py-12 mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row justify-between items-center">
+    <footer className="bg-dark text-light py-3 mt-auto">
+      <div className="container">
+        <div className="row gy-2 align-items-center">
           
           {/* Logo/Name */}
-          <div className="mb-6 md:mb-0">
-            <h2 className="text-2xl font-bold text-indigo-400">AP.dev</h2>
-            <p className="text-gray-400 mt-2 text-sm">
-              MERN Stack Developer based in Bhopal.
+          <div className="col-lg-4 col-md-12 text-center text-lg-start">
+            <h3 className="fw-bold text-primary h6 mb-0">MERN Stack Developer</h3>
+            <p className="text-muted mb-0" style={{ fontSize: '0.8rem' }}>
+              Based in Bhopal.
             </p>
           </div>
 
           {/* Navigation Links */}
-          <div className="flex space-x-6 mb-6 md:mb-0">
-            <a href="#home" className="text-gray-400 hover:text-white transition">Home</a>
-            <a href="#projects" className="text-gray-400 hover:text-white transition">Projects</a>
-            <a href="#skills" className="text-gray-400 hover:text-white transition">Skills</a>
+          <div className="col-lg-4 col-md-6 d-flex justify-content-center">
+            <ul className="list-unstyled d-flex gap-2 mb-0">
+              <li><a href="#home" className="nav-link px-2 py-0 text-light" style={{ fontSize: '0.85rem' }}>Home</a></li>
+              <li><a href="#projects" className="nav-link px-2 py-0 text-light" style={{ fontSize: '0.85rem' }}>Projects</a></li>
+              <li><a href="#skills" className="nav-link px-2 py-0 text-light" style={{ fontSize: '0.85rem' }}>Skills</a></li>
+            </ul>
           </div>
 
           {/* Social Links */}
-          <div className="flex space-x-5">
-            <a href="https://github.com" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-indigo-400 transition">
-              <span className="sr-only">GitHub</span>
-              {/* You can replace this with a GitHub SVG icon later */}
-              GH
+          <div className="col-lg-4 col-md-6 d-flex justify-content-center justify-content-lg-end gap-2">
+            <a href="https://github.com" target="_blank" rel="noreferrer" className="text-light" title="GitHub">
+              <i className="bi bi-github"></i>
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-indigo-400 transition">
-              <span className="sr-only">LinkedIn</span>
-              LI
+            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-light" title="LinkedIn">
+              <i className="bi bi-linkedin"></i>
             </a>
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-10 pt-8 text-center text-gray-500 text-sm">
-          <p>© {new Date().getFullYear()} Ajay Purbiya. All rights reserved.</p>
+        <hr className="my-2 border-secondary" />
+
+        <div className="text-center text-muted" style={{ fontSize: '0.75rem' }}>
+          <p className="mb-0">&copy; {new Date().getFullYear()} Ajay Purbiya. All rights reserved.</p>
         </div>
       </div>
     </footer>

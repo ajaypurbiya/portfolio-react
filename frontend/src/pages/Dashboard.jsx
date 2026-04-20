@@ -13,6 +13,8 @@ const Dashboard = () => {
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [projects, setProjects] = useState([]);
+  const [showTaskForm, setShowTaskForm] = useState(false);
+  const [newTask, setNewTask] = useState({ title: '', description: '' });
 
   const fetchProjects = async () => {
     try {
@@ -40,168 +42,255 @@ const Dashboard = () => {
   };
 
   const sidebarItems = [
-    { id: 'tasks', label: 'Tasks', icon: '📋' },
-    { id: 'projects', label: 'Projects', icon: '📁' },
-    { id: 'messages', label: 'Messages', icon: '📧' },
-    { id: 'skills', label: 'Skills', icon: '🛠️' },
-    { id: 'settings', label: 'Settings', icon: '⚙️' },
+    { id: 'tasks', label: 'Tasks', icon: 'bi-card-checklist' },
+    { id: 'projects', label: 'Projects', icon: 'bi-folder2-open' },
+    { id: 'messages', label: 'Messages', icon: 'bi-envelope' },
+    { id: 'skills', label: 'Skills', icon: 'bi-tools' },
+    { id: 'settings', label: 'Settings', icon: 'bi-gear' },
   ];
 
-  // Fetch tasks
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await axios.get('/tasks');
-        setTasks(response.data);
-      } catch (err) {
-        setError('Failed to fetch tasks');
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchTasks = async () => {
+    try {
+      const response = await axios.get('/tasks');
+      setTasks(response.data);
+    } catch (err) {
+      setError('Failed to fetch tasks');
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchTasks();
   }, []);
 
+  const handleAddTask = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post('/tasks', newTask);
+      setNewTask({ title: '', description: '' });
+      setShowTaskForm(false);
+      fetchTasks(); // Refresh tasks list
+    } catch (err) {
+      setError('Failed to add task: ' + (err.response?.data?.message || err.message));
+    }
+  };
+
   return (
-    <div className="flex h-screen bg-gray-100 pt-16">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white shadow-md hidden md:flex flex-col">
-        <div className="p-6 text-xl font-bold text-gray-800 border-b">
-          Admin Panel
-        </div>
-        <nav className="flex-grow mt-4">
-          {sidebarItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              className={`w-full flex items-center px-6 py-3 text-left transition-colors ${
-                activeTab === item.id 
-                  ? 'bg-indigo-50 text-indigo-600 border-r-4 border-indigo-600' 
-                  : 'text-gray-600 hover:bg-gray-50'
-              }`}
-            >
-              <span className="mr-3">{item.icon}</span>
-              {item.label}
-            </button>
-          ))}
-        </nav>
-        <div className="p-4 border-t">
-          <button 
-            onClick={logout}
-            className="w-full bg-red-50 text-red-600 py-2 rounded-md hover:bg-red-600 hover:text-white transition"
-          >
-            Logout
-          </button>
-        </div>
-      </aside>
-
-      {/* Content Area */}
-      <main className="flex-grow p-8 overflow-y-auto">
-        <header className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-800 capitalize">
-            Manage {activeTab}
-          </h1>
-          <div className="text-sm text-gray-500">
-            Logged in as: <span className="font-semibold">{user?.email}</span>
+    <div className="bg-light min-vh-100 pt-5 pb-5">
+      <div className="container-xl pt-4 mt-4">
+        <div className="row g-4">
+          {/* Sidebar */}
+          <div className="col-md-4 col-lg-3 d-none d-md-block">
+            <aside className="card rounded-4 shadow-sm p-4 sticky-top border-0" style={{ top: '100px' }}>
+              <h5 className="fw-bold text-primary mb-4 pb-3 border-bottom">
+                <i className="bi bi-speedometer2 me-2"></i>Admin Panel
+              </h5>
+              <nav className="nav nav-pills flex-column gap-2 mb-4">
+                {sidebarItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveTab(item.id)}
+                    className={`nav-link text-start rounded-3 d-flex align-items-center transition-all ${
+                      activeTab === item.id 
+                        ? 'active fw-bold shadow-sm' 
+                        : 'text-muted hover-bg-light'
+                    }`}
+                  >
+                    <i className={`bi ${item.icon} me-3 fs-5`}></i>
+                    {item.label}
+                  </button>
+                ))}
+              </nav>
+              <button 
+                onClick={logout}
+                className="btn btn-danger bg-opacity-10 text-danger w-100 fw-bold rounded-3 border-0 lift-on-hover"
+              >
+                <i className="bi bi-box-arrow-right me-2"></i>Logout
+              </button>
+            </aside>
           </div>
-        </header>
 
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4 text-sm">
-            {error}
-          </div>
-        )}
-
-        {/* Dynamic Content */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 min-h-[400px]">
-          {activeTab === 'tasks' && (
-            <div>
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg font-semibold">Your Tasks</h2>
-                <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
-                  + Add Task
-                </button>
+          {/* Main Content Area */}
+          <div className="col-md-8 col-lg-9">
+            {/* Mobile Navigation (Visible only on small screens) */}
+            <div className="d-md-none mb-4 overflow-auto pb-2" style={{ whiteSpace: 'nowrap' }}>
+              <div className="d-flex gap-2">
+                {sidebarItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveTab(item.id)}
+                    className={`btn rounded-pill flex-shrink-0 d-inline-flex align-items-center ${
+                      activeTab === item.id 
+                        ? 'btn-primary shadow-sm fw-bold' 
+                        : 'btn-outline-secondary bg-light text-muted'
+                    }`}
+                  >
+                    <i className={`bi ${item.icon} me-2`}></i>
+                    {item.label}
+                  </button>
+                ))}
               </div>
-              {loading ? (
-                <div className="flex items-center justify-center h-32 text-gray-500">
-                  Loading tasks...
+            </div>
+
+            {/* Header */}
+            <header className="card p-4 rounded-4 shadow-sm mb-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center border-0">
+              <div>
+                <h1 className="h3 fw-bold text-capitalize mb-1">
+                  Manage {activeTab}
+                </h1>
+                <div className="text-muted small">
+                  Logged in as: <span className="fw-semibold text-primary">{user?.email}</span>
                 </div>
-              ) : tasks.length === 0 ? (
-                <div className="border-2 border-dashed border-gray-200 rounded-lg h-32 flex items-center justify-center text-gray-400">
-                  No tasks found. Create your first task!
-                </div>
-              ) : (
-                <div className="grid gap-4">
-                  {tasks.map((task) => (
-                    <div key={task._id} className="p-4 border rounded-lg hover:shadow-md transition">
-                      <h3 className="font-semibold">{task.title}</h3>
-                      <p className="text-gray-600">{task.description}</p>
-                      <span className={`inline-block px-2 py-1 text-xs rounded-full ${
-                        task.completed ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                      }`}>
-                        {task.completed ? 'Done' : 'Pending'}
-                      </span>
+              </div>
+            </header>
+
+            {error && (
+              <div className="alert alert-danger border-0 shadow-sm py-2 px-3 small fw-medium mb-4">
+                <i className="bi bi-exclamation-triangle-fill me-2"></i>{error}
+              </div>
+            )}
+
+            {/* Dynamic Content Panel */}
+            <div className="card rounded-4 shadow-sm p-4 p-md-5 border-0" style={{ minHeight: '500px' }}>
+              
+              {activeTab === 'tasks' && (
+                <div>
+                  <div className="d-flex justify-content-between align-items-center mb-4">
+                    <h2 className="h4 fw-bold mb-0">Your Tasks</h2>
+                    <button 
+                      onClick={() => setShowTaskForm(!showTaskForm)}
+                      className={`btn ${showTaskForm ? 'btn-secondary' : 'btn-primary'} rounded-pill lift-on-hover px-4`}
+                    >
+                      <i className={`bi ${showTaskForm ? 'bi-x-lg' : 'bi-plus-lg'} me-1`}></i> {showTaskForm ? 'Close Form' : 'Add Task'}
+                    </button>
+                  </div>
+                  
+                  {showTaskForm && (
+                    <div className="mb-5 card bg-light p-4 rounded-4 border-0 shadow-sm">
+                      <h4 className="fw-bold mb-3 h5">Create New Task</h4>
+                      <form onSubmit={handleAddTask}>
+                        <div className="mb-3">
+                          <input 
+                            type="text" 
+                            className="form-input mb-0 mt-1" 
+                            placeholder="Task Title" 
+                            required 
+                            value={newTask.title}
+                            onChange={(e) => setNewTask({...newTask, title: e.target.value})}
+                          />
+                        </div>
+                        <div className="mb-3">
+                          <textarea 
+                            className="form-input mb-0 mt-1" 
+                            placeholder="Task Description" 
+                            required 
+                            rows="3"
+                            value={newTask.description}
+                            onChange={(e) => setNewTask({...newTask, description: e.target.value})}
+                          ></textarea>
+                        </div>
+                        <button type="submit" className="btn btn-primary w-100 fw-bold">Save Task</button>
+                      </form>
                     </div>
-                  ))}
+                  )}
+
+                  {loading ? (
+                    <div className="text-center text-muted py-5">
+                      <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                      Loading tasks...
+                    </div>
+                  ) : !showTaskForm && tasks.length === 0 ? (
+                    <div className="text-center p-5 card border rounded-4 bg-light text-muted mt-4 border-dashed">
+                      <i className="bi bi-clipboard-x display-4 opacity-50 mb-3 d-block"></i>
+                      No tasks found. Create your first task!
+                    </div>
+                  ) : (
+                    <div className="row g-3">
+                      {tasks.map((task) => (
+                        <div key={task._id} className="col-12">
+                          <div className="p-4 card bg-light rounded-4 border-0 lift-on-hover d-flex flex-row justify-content-between align-items-start shadow-sm">
+                            <div>
+                              <h3 className="h6 fw-bold mb-1">{task.title}</h3>
+                              <p className="text-muted small mb-0">{task.description}</p>
+                            </div>
+                            <span className={`badge rounded-pill ${
+                              task.completed ? 'bg-success bg-opacity-10 text-success' : 'bg-warning bg-opacity-10 text-warning'
+                            }`}>
+                              {task.completed ? 'Done' : 'Pending'}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+              
+              {activeTab === 'projects' && (
+                <div>
+                  <div className="d-flex justify-content-between align-items-center mb-4">
+                    <h2 className="h4 fw-bold mb-0">Your Projects</h2>
+                    <button 
+                      onClick={() => setShowForm(!showForm)}
+                      className={`btn ${showForm ? 'btn-secondary' : 'btn-primary'} rounded-pill lift-on-hover px-4`}
+                    >
+                      <i className={`bi ${showForm ? 'bi-x-lg' : 'bi-plus-lg'} me-1`}></i> {showForm ? 'Close Form' : 'Add New'}
+                    </button>
+                  </div>
+
+                  {showForm && (
+                    <div className="mb-5">
+                      <AddProjectForm refreshProjects={fetchProjects} />
+                    </div>
+                  )}
+
+                  {!showForm && projects.length === 0 && (
+                    <div className="text-center p-5 card border rounded-4 bg-light text-muted mt-4 border-dashed">
+                      <i className="bi bi-folder2-open display-4 opacity-50 mb-3 d-block"></i>
+                      Project list will appear here...
+                    </div>
+                  )}
+
+                  <div className="row g-4 mt-2">
+                    {projects.map(proj => (
+                      <ProjectCard 
+                        key={proj._id} 
+                        project={proj} 
+                        isAdmin={true} 
+                        onDelete={handleDelete} 
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {activeTab === 'messages' && (
+                <div>
+                  <h2 className="h4 fw-bold mb-4">Inbox</h2>
+                  <MessageList />
+                </div>
+              )}
+              
+              {activeTab === 'skills' && (
+                <div className="text-center py-5">
+                  <i className="bi bi-tools display-1 text-muted opacity-25 mb-3 d-block"></i>
+                  <h2 className="h4 fw-bold mb-2">Skills Management</h2>
+                  <p className="text-muted">Skill management interface coming soon...</p>
+                </div>
+              )}
+              
+              {activeTab === 'settings' && (
+                <div className="text-center py-5">
+                  <i className="bi bi-gear display-1 text-muted opacity-25 mb-3 d-block"></i>
+                  <h2 className="h4 fw-bold mb-2">Account Settings</h2>
+                  <p className="text-muted">User settings coming soon...</p>
                 </div>
               )}
             </div>
-          )}
-          
-{activeTab === 'projects' && (
-  <div>
-    <div className="flex justify-between items-center mb-6">
-      <h2 className="text-lg font-semibold">Your Projects</h2>
-      <button 
-        onClick={() => setShowForm(!showForm)}
-        className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700"
-      >
-        {showForm ? 'Close Form' : '+ Add New'}
-      </button>
-    </div>
-
-{showForm && <AddProjectForm refreshProjects={fetchProjects} />}
-
-    <div className="mt-6 border-2 border-dashed border-gray-200 rounded-lg h-32 flex items-center justify-center text-gray-400">
-      Project list will appear here...
-    </div>
-
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-      {projects.map(proj => (
-        <ProjectCard 
-          key={proj._id} 
-          project={proj} 
-          isAdmin={true} 
-          onDelete={handleDelete} 
-        />
-      ))}
-    </div>
-  </div>
-)}
-          
-          {activeTab === 'messages' && (
-            <div>
-              <h2 className="text-lg font-semibold">Inbox</h2>
-              <MessageList />
-            </div>
-          )}
-          
-          {activeTab === 'skills' && (
-            <div>
-              <h2 className="text-lg font-semibold mb-4">Skills</h2>
-              <p className="text-gray-600">Skill management coming soon...</p>
-            </div>
-          )}
-          
-          {activeTab === 'settings' && (
-            <div>
-              <h2 className="text-lg font-semibold mb-4">Settings</h2>
-              <p className="text-gray-600">User settings coming soon...</p>
-            </div>
-          )}
+          </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 };

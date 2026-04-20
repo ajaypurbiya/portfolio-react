@@ -1,74 +1,60 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import bgImage from '../assets/background-hero.jpg';
 
 const Hero = () => {
   return (
-    <section className="pt-32 pb-20 bg-white dark:bg-slate-900 transition-colors duration-300 px-4 sm:px-6 lg:px-8">
+    <motion.section 
+      className="hero-section position-relative d-flex flex-column justify-content-center align-items-center text-center min-vh-100 overflow-hidden"
+      style={{
+        background: `linear-gradient(135deg, rgba(79,70,229,0.9) 0%, rgba(147,51,234,0.8) 100%), url(${bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundBlendMode: 'overlay'
+      }}
+    >
       <motion.div 
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="max-w-4xl mx-auto text-center"
+        transition={{ duration: 0.8 }}
       >
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-gray-900 dark:text-white">
-          Hi, I&apos;m <span className="text-indigo-600">Ajay</span>
+        <h1 className="display-2 fw-bold mb-5 text-white drop-shadow-lg">
+          Hi, I'm <span className="text-warning">Ajay</span>
         </h1>
         
         <motion.p 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3, duration: 0.8 }}
-          className="text-xl md:text-2xl text-gray-500 dark:text-slate-400 mb-8 max-w-3xl mx-auto leading-relaxed"
-        >
-          Full-Stack MERN Developer | Building scalable web applications with modern technologies
-        </motion.p>
-        
-        {/* Stats */}
-        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-          className="flex flex-wrap justify-center gap-8 mb-12 text-lg md:text-xl"
+          transition={{ delay: 0.3 }}
+          className="lead fs-3 text-white-50 mb-5 px-3" style={{maxWidth: '40rem', margin: '0 auto'}}
         >
-          <div>
-            <span className="font-bold text-2xl md:text-3xl text-indigo-600 dark:text-indigo-400">50+</span>
-            <div className="text-gray-600 dark:text-gray-300">Projects</div>
-          </div>
-          <div>
-            <span className="font-bold text-2xl md:text-3xl text-indigo-600 dark:text-indigo-400">3+</span>
-            <div className="text-gray-600 dark:text-gray-300">Years Exp</div>
-          </div>
-          <div>
-            <span className="font-bold text-2xl md:text-3xl text-indigo-600 dark:text-indigo-400">100%</span>
-            <div className="text-gray-600 dark:text-gray-300">Satisfaction</div>
-          </div>
-        </motion.div>
-        
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-          <Link
-            to="/register"
-            className="bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white px-10 py-4 rounded-full text-lg font-semibold shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
-          >
-            Get Started Free
-          </Link>
-          <Link
-            to="/login"
-            className="bg-transparent border-2 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-slate-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white px-10 py-4 rounded-full text-lg font-semibold transition-all duration-300"
-          >
-            Login
-          </Link>
-        </div>
+          Full-Stack MERN Developer creating scalable web apps with cutting-edge tech
+        </motion.p>
       </motion.div>
-      
-      {/* Scroll Indicator */}
-      <div className="animate-bounce mt-12">
-        <svg className="w-6 h-6 mx-auto text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-        </svg>
-      </div>
-    </section>
+
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.6 }}
+        className="d-flex flex-column flex-md-row gap-3"
+      >
+        <Link to="/register" className="btn btn-light btn-lg px-5 py-3 rounded-pill shadow-lg lift-on-hover fs-5">
+          <i className="bi bi-rocket-takeoff-fill me-2 text-primary"></i> Get Started Free
+        </Link>
+        <Link to="/login" className="btn btn-outline-light btn-lg px-5 py-3 rounded-pill fs-5">
+          <i className="bi bi-shield-lock-fill me-2"></i> Login
+        </Link>
+      </motion.div>
+
+      <motion.div 
+        className="position-absolute bottom-0 start-50 translate-middle-x mb-4"
+        animate={{ y: [0, -10, 0] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      >
+        <i className="bi bi-chevron-double-down text-white fs-1 opacity-75"></i>
+      </motion.div>
+    </motion.section>
   );
 };
 

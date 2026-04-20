@@ -49,11 +49,10 @@ app.use('/api/users', require('./routes/userRoutes'));
 // Register Routes
 app.use('/api/tasks', require('./routes/taskRoutes'));
 app.use('/api/projects', require('./routes/projectRoutes'));
+app.use('/api/messages', require('./routes/messageRoutes'));
 
 // Overwrite default Express error handler
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+const PORT = process.env.PORT || 5000;\n\nif (typeof module !== 'undefined' && module.exports) {\n  module.exports.app = app;\n}\n\n// Only listen if not in Vercel serverless\nif (!process.env.VERCEL) {\n  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));\n}

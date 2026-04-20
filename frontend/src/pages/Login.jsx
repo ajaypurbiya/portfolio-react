@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 
@@ -29,34 +29,42 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Admin Login</h2>
+    <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light px-3 py-5">
+      <div className="bg-white p-4 p-md-5 rounded-4 shadow-sm border-0 w-100" style={{ maxWidth: '450px' }}>
+        <div className="text-center mb-4">
+          <div className="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style={{ width: '64px', height: '64px' }}>
+            <i className="bi bi-shield-lock fs-1"></i>
+          </div>
+          <h2 className="fw-bold mb-1">Admin Login</h2>
+          <p className="text-muted small">Sign in to manage your portfolio</p>
+        </div>
         
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-6 text-sm">
-            {error}
+          <div className="alert alert-danger border-0 shadow-sm py-2 px-3 small fw-medium mb-4 text-center">
+            <i className="bi bi-exclamation-triangle-fill me-2"></i>{error}
           </div>
         )}
         
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Email Address</label>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label className="form-label fw-bold small mb-0 text-muted">Email</label>
             <input
               type="email"
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="form-input mb-1 mt-1 ml-2"
+              placeholder="admin@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Password</label>
+          <div className="mb-4">
+            <label className="form-label fw-bold small mb-0 text-muted">Password</label>
             <input
               type="password"
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              className="form-input mb- mt-1"
+              placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
@@ -64,11 +72,17 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="btn btn-primary w-100 py-3 rounded-3 fw-bold lift-on-hover"
           >
-            Sign In
+            Sign In <i className="bi bi-arrow-right ms-2"></i>
           </button>
         </form>
+        
+        <div className="text-center mt-4">
+          <Link to="/" className="text-primary fw-bold text-decoration-none small">
+            <i className="bi bi-arrow-left me-1"></i> Back to Portfolio
+          </Link>
+        </div>
       </div>
     </div>
   );

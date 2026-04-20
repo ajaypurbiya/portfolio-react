@@ -7,22 +7,34 @@ import Contact from '../components/Contact';
 import Footer from '../components/Footer';
 
 const Home = () => {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // 1. Add your projects directly into this array
+  const [projects, setProjects] = useState([
+    {
+      _id: "project-1", // You can just use any unique string here
+      title: "My Awesome Project",
+      description: "I built this amazing project and added it directly through the code.",
+      techStack: ["React", "Tailwind", "Node.js"],
+      link: "https://github.com/yourusername/your-project",
+      image: "/my-project-image.jpg" // We will put this file in the public folder
+    }
+    // Add more objects here for more projects!
+  ]);
+  const [loading, setLoading] = useState(false); // Set to false since data is already here
 
-  useEffect(() => {
-    const getProjects = async () => {
-      try {
-        const response = await axios.get('/projects'); // Uses axios baseURL
-        setProjects(response.data);
-      } catch (err) {
-        console.error("Error fetching projects:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    getProjects();
-  }, []);
+  // 2. Comment out the database fetch so it doesn't overwrite your manual list
+  // useEffect(() => {
+  //   const getProjects = async () => {
+  //     try {
+  //       const response = await axios.get('/projects');
+  //       setProjects(response.data);
+  //     } catch (err) {
+  //       console.error("Error fetching projects:", err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   getProjects();
+  // }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-white">

@@ -23,56 +23,56 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white dark:bg-slate-900 shadow-md fixed w-full z-50 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 flex justify-between h-16 items-center">
-        <span className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">AP.dev</span>
+    <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm fixed-top">
+      <div className="container">
+        <Link className="navbar-brand fw-bold text-primary fs-4" to="/">
+          MERN Stack Developer
+        </Link>
         
-        <div className="flex items-center space-x-4">
-          
-          {/* Theme Toggle Button */}
-          <button 
-            onClick={() => setIsDark(!isDark)}
-            className="p-2 rounded-full bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-yellow-400 hover:scale-105 transition-all duration-200"
-          >
-            {isDark ? '☀️' : '🌙'}
-          </button>
-          
-          <Link
-            to="/"
-            className="text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-slate-700 px-3 py-2 rounded-md text-sm font-medium transition duration-200"
-          >
-            Home
-          </Link>
+        <button 
+          className="btn btn-outline-secondary rounded-circle me-2 theme-toggle-btn"
+          onClick={() => setIsDark(!isDark)}
+          type="button"
+          title="Toggle theme"
+        >
+          {isDark ? '☀️' : '🌙'}
+        </button>
+
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav ms-auto">
+            <li className="nav-item">
+              <Link className="nav-link" to="/">Home</Link>
+            </li>
             
             {!user ? (
-              <Link
-                to="/login"
-                className="bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200"
-              >
-                Login
-              </Link>
+              <li className="nav-item">
+                <Link className="nav-link btn btn-primary ms-2" to="/login">Login</Link>
+              </li>
             ) : (
               <>
-                <Link
-                  to="/dashboard"
-                  className="text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-slate-700 px-3 py-2 rounded-md text-sm font-medium transition duration-200"
-                >
-                  Dashboard
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="bg-red-500 hover:bg-red-600 dark:hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-200"
-                >
-                  Logout
-                </button>
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Hi, {user.name || user.email}
-                </span>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/dashboard">Dashboard</Link>
+                </li>
+                <li className="nav-item">
+                  <button className="nav-link btn btn-danger ms-2" onClick={handleLogout}>
+                    Logout
+                  </button>
+                </li>
+                <li className="nav-item">
+                  <span className="nav-link text-muted ms-2">
+                    Hi, {user.name || user.email}
+                  </span>
+                </li>
               </>
             )}
-          </div>
+          </ul>
         </div>
-      </nav>
+      </div>
+    </nav>
   );
 };
 

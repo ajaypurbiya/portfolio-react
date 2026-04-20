@@ -2,72 +2,76 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const ProjectCard = ({ project, isAdmin = false, onDelete }) => {
-  // Assuming your backend serves static files from an 'uploads' folder
   const imageUrl = project.image 
     ? `http://localhost:5000/${project.image}` 
     : '/placeholder-project.jpg';
 
   return (
     <motion.div 
-      initial={{ opacity: 0, scale: 0.9 }}
-      whileInView={{ opacity: 1, scale: 1 }}
+      className="col-lg-4 col-md-6 mb-4"
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       whileHover={{ y: -10 }}
       transition={{ duration: 0.5 }}
-      className="bg-white dark:bg-slate-800 rounded-xl shadow-md overflow-hidden border border-gray-100 dark:border-slate-700 transition-colors duration-300">
-      <img 
-        src={imageUrl} 
-        alt={project.title} 
-        className="w-full h-48 object-cover" 
-      />
-      <div className="p-6">
-        <div className="flex justify-between items-start mb-4">
-          <div className="flex-1">
-            <div className="bg-white dark:bg-slate-800 border-gray-100 dark:border-slate-700">
-              <h3 className="text-gray-900 dark:text-white">{project.title}</h3>
-              <p className="text-gray-600 dark:text-slate-400">{project.description}</p>
-            </div>
+    >
+      <div className="card h-100 border-0 shadow-lg hover-shadow-xl rounded-3 position-relative overflow-hidden">
+        <div className="position-relative">
+          <img 
+            src={imageUrl} 
+            alt={project.title} 
+            className="card-img-top"
+            style={{ height: '200px', objectFit: 'cover' }}
+          />
+          <div className="position-absolute top-0 end-0 m-3">
+            {isAdmin && (
+              <button
+                onClick={() => onDelete(project._id)}
+                className="btn btn-danger btn-sm rounded-circle shadow"
+                title="Delete project"
+              >
+                <i className="bi bi-trash"></i>
+              </button>
+            )}
           </div>
-          {isAdmin && (
-            <button
-              onClick={() => onDelete(project._id)}
-              className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 text-sm font-medium p-1 -m-1 rounded hover:bg-red-50 dark:hover:bg-red-950/50 transition"
-              title="Delete project"
-            >
-              ✕
-            </button>
-          )}
         </div>
-      
-      <div className="flex flex-wrap gap-2 mb-4">
-        {project.techStack.map((tech, index) => (
-          <span
-            key={index}
-            className="px-3 py-1 bg-indigo-100 dark:bg-slate-800 text-indigo-800 dark:text-indigo-400 text-sm rounded-full font-medium"
-          >
-            {tech}
-          </span>
-        ))}
+        <div className="card-body d-flex flex-column p-4">
+          <h5 className="card-title fw-bold mb-3">{project.title}</h5>
+          <p className="card-text flex-grow-1 text-muted">{project.description}</p>
+          
+          <div className="mb-3">
+            {project.techStack.slice(0, 4).map((tech, index) => (
+              <span
+                key={index}
+                className="badge bg-primary bg-opacity-10 text-primary border border-primary me-1 mb-1 px-2 py-1"
+              >
+                {tech}
+              </span>
+            ))}
+            {project.techStack.length > 4 && (
+              <span className="badge bg-secondary text-white">+{project.techStack.length - 4}</span>
+            )}
+          </div>
+          
+          {project.link && (
+            <a
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary w-100 mt-auto"
+            >
+              View Project <i className="bi bi-box-arrow-up-right ms-1"></i>
+            </a>
+          )}
+          
+          <small className="text-muted mt-2">
+            Created {new Date(project.createdAt).toLocaleDateString()}
+          </small>
+        </div>
       </div>
-      
-      {project.link && (
-        <a
-          href={project.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 text-white px-6 py-2 rounded-lg font-semibold transition-colors text-sm"
-        >
-          View Project →
-        </a>
-      )}
-      
-        <p className="text-xs text-gray-400 dark:text-slate-500 mt-4">
-          Created {new Date(project.createdAt).toLocaleDateString()}
-        </p>
-      </div>
-  </motion.div>
+    </motion.div>
   );
-
 };
 
 export default ProjectCard;
+
