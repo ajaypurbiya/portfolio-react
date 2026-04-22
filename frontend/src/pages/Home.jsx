@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import Hero from '../components/Hero';
 import Skills from '../components/Skills';
 import ProjectCard from '../components/ProjectCard';
@@ -8,7 +7,7 @@ import Footer from '../components/Footer';
 
 const Home = () => {
   // 1. Add your projects directly into this array
-  const [projects, setProjects] = useState([
+  const [projects] = useState([
     {
       _id: "project-1", // You can just use any unique string here
       title: "My Awesome Project",
@@ -19,7 +18,7 @@ const Home = () => {
     }
     // Add more objects here for more projects!
   ]);
-  const [loading, setLoading] = useState(false); // Set to false since data is already here
+  const [loading] = useState(false); // Set to false since data is already here
 
   // 2. Comment out the database fetch so it doesn't overwrite your manual list
   // useEffect(() => {

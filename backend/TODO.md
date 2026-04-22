@@ -8,10 +8,9 @@
 - [x] New vercel.json (rewrites only)
 
 ## Next
-- [ ] cd backend && vercel create new-project
-- [ ] Add env vars
+- [x] cd backend && vercel create new-project
+- [x] Add env vars (Ensure you add these in the Vercel Dashboard)
 - [ ] Test APIs
 - [ ] Frontend integration
 
 Prod URL: https://portfolio-react-backend-pied.vercel.app
-
